@@ -1,0 +1,13 @@
+*
+!.gitignore
+!dev
+!staging
+!production
+!docker-compose.sh
+!docker-compose.yml
+
+!/nginx
+!/php
+!/php-fpm.d
+!/supervisor
+!/cron

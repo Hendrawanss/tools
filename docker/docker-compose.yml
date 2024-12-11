@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  app:
+    image: hendrawanss/php-laravel:8.2-fpm
+    restart: always
+    volumes:
+      - ${PROJECT_PATH}:/var/www/html
+      - ${PROJECT_PATH}/docker/php/php.ini:/usr/local/etc/php/php.ini
+      - ${PROJECT_PATH}/docker/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
+    environment:
+      - TZ=Asia/Jakarta
+    logging:
+      options:
+        max-file: '1'
+        max-size: '1m'
+
+  nginx:
+    image: nginx:alpine
+    restart: always
+    links:
+      - app
+    volumes:
+      - ${PROJECT_PATH}:/var/www/html
+      - ${PROJECT_PATH}/storage/logs/nginx:/var/log/nginx
+      - ${PROJECT_PATH}/docker/nginx/templates:/etc/nginx/templates
+    ports:
+      - 8000:80
+    environment:
+      - TZ=Asia/Jakarta
+      - FPM_HOST=app
+    logging:
+      options:
+        max-file: '1'
+        max-size: '1m'
+
+networks:
+  default:
+    name: tools
