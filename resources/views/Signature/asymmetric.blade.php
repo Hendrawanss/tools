@@ -30,7 +30,7 @@
         </div>
         <div class="mb-6">
             <label class="block text-gray-700 text-sm font-bold mb-2" for="payload">
-                Request Body in JSON Format
+                Request Body in JSON Format <p id="pretty" class="text-blue-500 text-xs cursor-pointer">Click for make pretty</p>
             </label>
             <textarea rows="10" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                 id="payload" placeholder="Ex: /v1.0/bank-account-inquiry" name="payload" required>{{ $request['payload'] ?? '' }}</textarea>
@@ -67,24 +67,20 @@
     </form>
     <script>
         const payload = document.getElementById('payload');
-        const btnSubmit = document.getElementById('btn-submit');
-
-        btnSubmit.onclick = function(e) {
-            e.preventDefault();
-
+        const pretty = document.getElementById('pretty');
+        
+        payload.onblur = function (e) {
             try {
                 payload.value = JSON.stringify(JSON.parse(payload.value));
             } catch (e) {
-                alert('JSON format is invalid.')
+                alert('JSON format is invalid.');
+                payload.value = '';
             }
+        };
 
-            document.getElementById('form').submit();
+        pretty.onclick = function () {
+            payload.value = JSON.stringify(JSON.parse(payload.value), null, 2);
         }
     </script>
-    @if (! empty($request['payload'] ?? null))
-        <script>
-            payload.value = JSON.stringify(JSON.parse(payload.value), null, 2)
-        </script>
-    @endif
 </body>
 </html>
